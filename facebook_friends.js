@@ -53,7 +53,9 @@ var FriendList=function(){
                     insertIntoFriendList(friends[i]);
                 }
                 var friendsearch=document.getElementById("friendsearch");
-                friendsearch.onkeyup=sortFriends(friendsearch.value);
+                friendsearch.onkeyup=function(){
+                    sortFriends(friendsearch.value)
+                };
             } else {
                 console.log('friends didn\'t come in');
             }
