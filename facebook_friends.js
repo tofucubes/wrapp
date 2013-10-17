@@ -1,15 +1,15 @@
+function insertIntoElement(name,content){
+    document.getElementById(name).innerHTML+=content;
+}
+function clearElement(name){
+    document.getElementById(name).innerHTML='';
+}
+
+var FriendList=function(){
     var friends;
 
     function insertIntoFriendList(friend){
-        var friendlist = document.getElementById("friendlist");
-        friendlist.innerHTML+=createFriendPair(friend.name,friend.id);
-    }
-    function clearFriendList(){
-        var friendlist = document.getElementById("friendlist");
-        friendlist.innerHTML='';
-    }
-    function createImg(id){
-        return '<img src="'+pictureUrl(id)+'">';
+        insertIntoElement("friendlist",createFriendPair(friend.name,friend.id));
     }
 
     function pictureUrl(id){
@@ -19,19 +19,8 @@
     function createFriendPair(name,id){
         return '<div>'+createImg(id)+'<br>'+name+'</div>';
     }
-    function getFriends() {
-        FB.api('/me/friends', function(response) {
-            friends = response.data;
-            console.log(friends);
-            if(response.data) {
-                for(var i=0;i<10;i++){
-                    insertIntoFriendList(friends[i]);
-                }
-            } else {
-                console.log('friends didn\'t come in');
-            }
-
-        });
+    function createImg(id){
+        return '<img src="'+pictureUrl(id)+'">';
     }
 
     function sortFriends(search){
@@ -46,19 +35,32 @@
             var other_name_match = friends[i].name.toLowerCase().indexOf(' '+search)!=-1;
             var boolean_contains_search= first_name_match || other_name_match;
 
-
             if(boolean_contains_search){
                 if(newresults==false){
-                    clearFriendList();
+                    clearElement('friendlist');
                 }
                 newresults=true;
                 insertIntoFriendList(friends[i]);
             }
         }
     }
-    function sortFriendsController(){
-        sortFriends(document.getElementById('friendsearch').value);
+
+    this.getFriends=function getFriends(){
+        FB.api('/me/friends', function(response){
+            friends = response.data;
+            if(response.data){
+                for(var i=0;i<10;i++){
+                    insertIntoFriendList(friends[i]);
+                }
+                var friendsearch=document.getElementById("friendsearch");
+                friendsearch.onkeyup=sortFriends(friendsearch.value);
+            } else {
+                console.log('friends didn\'t come in');
+            }
+        });
     }
+
+};
 
 
     window.fbAsyncInit = function() {
@@ -82,8 +84,8 @@
                 // login status of the person. In this case, we're handling the situation where they
                 // have logged in to the app.
                 console.log('you have friends');
-                getFriends();
-
+                var friends=new FriendList();
+                friends.getFriends();
             } else if (response.status === 'not_authorized') {
                 // In this case, the person is logged into Facebook, but not into the app, so we call
                 // FB.login() to prompt them to do so.
