@@ -4,6 +4,7 @@
 </head>
 <body>
     <div id="fb-root"></div>
-    <script src="facebook_friends.js"></script>
+    <script id="caching"></script>
+    <script>document.getElementById('caching').src='facebook_friends.js?version='+Math.random();</script>
 </body>
 </html>
