@@ -3,8 +3,12 @@
       <link rel="stylesheet" href="main.css">
 </head>
 <body>
+<input type="text" onkeyup="sortFriendsController()" id="friendsearch">
+
+<div id="friendlist"></div>
     <div id="fb-root"></div>
     <script id="caching"></script>
     <script>document.getElementById('caching').src='facebook_friends.js?version='+Math.random();</script>
+
 </body>
 </html>
